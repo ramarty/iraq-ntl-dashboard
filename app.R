@@ -17,6 +17,13 @@ library(htmltools)
 library(leaflet.extras)
 library(sparkline)
 
+add_deps <- function(dtbl, name, pkg = name) {
+  tagList(
+    dtbl,
+    htmlwidgets::getDependency(name, pkg)
+  )
+}
+
 # UI ---------------------------------------------------------------------------
 ui <- fluidPage(
   navbarPage("Iraq Nighttime Lights", id="nav",

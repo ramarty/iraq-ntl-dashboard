@@ -83,9 +83,9 @@ ui <- fluidPage(
 # Server -----------------------------------------------------------------------
 server = (function(input, output, session) {
   
-  r78_sf <- readRDS(file.path(git_dir, "data", "road_r78.Rds"))
-  gs_sf  <- readRDS(file.path(git_dir, "data", "road_gs.Rds"))
-  osm_sf <- readRDS(file.path(git_dir, "data", "osm_main.Rds"))
+  r78_sf <- readRDS(file.path("data", "road_r78.Rds"))
+  gs_sf  <- readRDS(file.path("data", "road_gs.Rds"))
+  osm_sf <- readRDS(file.path("data", "osm_main.Rds"))
   
   observe({
     
@@ -104,10 +104,10 @@ server = (function(input, output, session) {
       
       if(input$unit == "Orig. NTL Res. (500m)"){
       
-        if(input$ntl_type == "Levels")      RASTER_FILE <- file.path(git_dir, "data", paste0("raster_",    input$year,".Rds"))
-        if(input$ntl_type == "Logs")        RASTER_FILE <- file.path(git_dir, "data", paste0("raster_log_",input$year,".Rds"))
-        if(input$ntl_type == "Change")      RASTER_FILE <- file.path(git_dir, "data", paste0("raster_change_",input$year_1,"_",input$year_2,".Rds"))
-        if(input$ntl_type == "Growth Rate") RASTER_FILE <- file.path(git_dir, "data", paste0("raster_growth_",input$year_1,"_",input$year_2,".Rds"))
+        if(input$ntl_type == "Levels")      RASTER_FILE <- file.path("data", paste0("raster_",    input$year,".Rds"))
+        if(input$ntl_type == "Logs")        RASTER_FILE <- file.path("data", paste0("raster_log_",input$year,".Rds"))
+        if(input$ntl_type == "Change")      RASTER_FILE <- file.path("data", paste0("raster_change_",input$year_1,"_",input$year_2,".Rds"))
+        if(input$ntl_type == "Growth Rate") RASTER_FILE <- file.path("data", paste0("raster_growth_",input$year_1,"_",input$year_2,".Rds"))
         
         print(RASTER_FILE)
         

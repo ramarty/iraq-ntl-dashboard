@@ -17,13 +17,6 @@ library(htmltools)
 library(leaflet.extras)
 library(sparkline)
 
-add_deps <- function(dtbl, name, pkg = name) {
-  tagList(
-    dtbl,
-    htmlwidgets::getDependency(name, pkg)
-  )
-}
-
 # UI ---------------------------------------------------------------------------
 ui <- fluidPage(
   navbarPage("Iraq Nighttime Lights", id="nav",
@@ -93,6 +86,13 @@ server = (function(input, output, session) {
   r78_sf <- readRDS(file.path("data", "road_r78.Rds"))
   gs_sf  <- readRDS(file.path("data", "road_gs.Rds"))
   osm_sf <- readRDS(file.path("data", "osm_main.Rds"))
+  
+  add_deps <- function(dtbl, name, pkg = name) {
+    tagList(
+      dtbl,
+      htmlwidgets::getDependency(name, pkg)
+    )
+  }
   
   observe({
     

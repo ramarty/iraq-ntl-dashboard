@@ -116,8 +116,6 @@ server = (function(input, output, session) {
         if(input$ntl_type == "Change")      RASTER_FILE <- file.path("data", paste0("raster_change_",input$year_1,"_",input$year_2,".Rds"))
         if(input$ntl_type == "Growth Rate") RASTER_FILE <- file.path("data", paste0("raster_growth_",input$year_1,"_",input$year_2,".Rds"))
         
-        print(RASTER_FILE)
-        
         if(!file.exists(RASTER_FILE)){
           r <- raster()
         } else{

@@ -156,12 +156,14 @@ server = (function(input, output, session) {
         
         if(input$ntl_type %in% "Growth Rate"){
           
-          if(input$year_1 >= input$year_2){
+          if(length(input$year_1) == 0){
+            roi_sf$ntl_var <- NA
+          } else if (input$year_1 >= input$year_2){
             roi_sf$ntl_var <- NA
           } else{
             roi_sf$ntl_var <- roi_sf[[paste0("ntl_growth_", input$year_1, "_", input$year_2)]]
           }
-          
+        
         }
         
         #### NTL Variable Range (for palette)

@@ -64,7 +64,7 @@ ui <- fluidPage(
                                         tags$style(type="text/css", '#year_begin_map {width: 80px; margin-left:50px}'),
                                         tags$style(type="text/css", '#year_end_map {width: 80px; margin-left:100px;}'),
                                         
-                                        selectInput("ntl_type", strong("Type"), 
+                                        selectInput("ntl_type", strong("Nighttime Lights Transformation"), 
                                                     choices=c("Levels", "Logs", "Change", "Growth Rate"), 
                                                     selected = "Logs", multiple = FALSE,
                                                     selectize = TRUE, width = NULL, size = NULL),

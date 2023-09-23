@@ -2,7 +2,7 @@
 
 # Polygon ----------------------------------------------------------------------
 for(roi in c( paste0("gadm", 1:2), # 1:2
-              paste0("hex", c(5, 10, 20, 30, 40, 50)))){  # 5, 10, 20, 30, 40, 50
+              paste0("hex", c(5, 10, 20, 30, 40, 50)))){  # 
   
   #### Load Data
   if(str_detect(roi, "gadm")){
@@ -58,17 +58,45 @@ for(roi in c( paste0("gadm", 1:2), # 1:2
                                          chartRangeMax = max(ntl_values),
                                          width = 50,
                                          height = 100,
-                                         tooltipChartTitle = "COVID-19 Cases",
+                                         tooltipChartTitle = "Nighttime Lights",
                                          highlightLineColor = 'orange', 
                                          highlightSpotColor = 'orange') %>%
-      as.character() #%>%
-    #htmltools::as.tags()
+      htmltools::as.tags() %>%
+      as.character() 
+    #
   }
   
   #### Export Data
   saveRDS(roi_sf, file.path(git_dir, "data", paste0(roi, ".Rds")))
   
 }
+
+# roi_sf <- readRDS(file.path(git_dir, "data", paste0("hex50", ".Rds")))
+# roi_sf$ntl_spark[1] 
+# 
+# add_deps <- function(dtbl, name, pkg = name) {
+#   tagList(
+#     dtbl,
+#     htmlwidgets::getDependency(name, pkg)
+#   )
+# }
+# roi_sf$popup <- paste0("<h4> Trends in NTL for:<br>", roi_sf$name, "</h4>", 
+#                        "<br>",
+#                        roi_sf$ntl_spark)
+# leaflet() %>%
+#   addTiles() %>%
+#   addPolygons(data = roi_sf,
+#               label = ~lapply(paste0(popup), HTML),
+#               popupOptions = popupOptions(minWidth = 100,
+#                                           maxHeight = 150),
+#               stroke = F,
+#               smoothFactor = 0,
+#               fillOpacity = 0.9) %>%
+#   onRender("function(el,x) {
+#       this.on('tooltipopen', function() {HTMLWidgets.staticRender();})
+#     }") %>%
+#   add_deps("sparkline") %>%
+#   browsable()
 
 # Raster -----------------------------------------------------------------------
 gadm0_sp <- readRDS(file.path(db_dir, "Data", "GADM", "RawData", paste0("gadm_", 0, ".Rds"))) %>%

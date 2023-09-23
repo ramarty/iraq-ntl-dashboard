@@ -111,15 +111,15 @@ server = (function(input, output, session) {
       
       if(input$unit == "Orig. NTL Res. (500m)"){
       
-        if(input$ntl_type == "Levels")      RASTER_FILE <- file.path("data", paste0("raster_",    input$year,".Rds"))
-        if(input$ntl_type == "Logs")        RASTER_FILE <- file.path("data", paste0("raster_log_",input$year,".Rds"))
-        if(input$ntl_type == "Change")      RASTER_FILE <- file.path("data", paste0("raster_change_",input$year_1,"_",input$year_2,".Rds"))
-        if(input$ntl_type == "Growth Rate") RASTER_FILE <- file.path("data", paste0("raster_growth_",input$year_1,"_",input$year_2,".Rds"))
+        if(input$ntl_type == "Levels")      RASTER_FILE <- file.path("data", paste0("raster_",    input$year,".tif"))
+        if(input$ntl_type == "Logs")        RASTER_FILE <- file.path("data", paste0("raster_log_",input$year,".tif"))
+        if(input$ntl_type == "Change")      RASTER_FILE <- file.path("data", paste0("raster_change_",input$year_1,"_",input$year_2,".tif"))
+        if(input$ntl_type == "Growth Rate") RASTER_FILE <- file.path("data", paste0("raster_growth_",input$year_1,"_",input$year_2,".tif"))
         
         if(!file.exists(RASTER_FILE)){
           r <- raster()
         } else{
-          r <- readRDS(RASTER_FILE)
+          r <- raster(RASTER_FILE)
         }
         
 

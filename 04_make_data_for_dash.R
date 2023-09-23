@@ -84,8 +84,8 @@ for(year_i in 2012:2022){
   r_log <- r
   r_log[] <- log(r_log[]+1)
   
-  saveRDS(r, file.path(git_dir, "data", paste0("raster_",year_i,".Rds")))
-  saveRDS(r_log, file.path(git_dir, "data", paste0("raster_log_",year_i,".Rds")))
+  writeRaster(r, file.path(git_dir, "data", paste0("raster_",year_i,".tif")))
+  writeRaster(r_log, file.path(git_dir, "data", paste0("raster_log_",year_i,".tif")))
   
 }
 
@@ -106,8 +106,8 @@ for(year_1 in 2012:2022){
     r <- r %>% crop(gadm0_sp) %>% mask(gadm0_sp)
     r_growth <- r_growth %>% crop(gadm0_sp) %>% mask(gadm0_sp)
     
-    saveRDS(r,        file.path(git_dir, "data", paste0("raster_change_",year_1,"_",year_2,".Rds")))
-    saveRDS(r_growth, file.path(git_dir, "data", paste0("raster_growth_",year_1,"_",year_2,".Rds")))
+    writeRaster(r,        file.path(git_dir, "data", paste0("raster_change_",year_1,"_",year_2,".tif")))
+    writeRaster(r_growth, file.path(git_dir, "data", paste0("raster_growth_",year_1,"_",year_2,".tif")))
     
   }
 }
@@ -129,103 +129,107 @@ saveRDS(r78_sp, file.path(git_dir, "data", "road_r78.Rds"))
 saveRDS(gs_sp,  file.path(git_dir, "data", "road_gs.Rds"))
 saveRDS(osm_sf, file.path(git_dir, "data", "osm_main.Rds"))
 
-leaflet() %>%
-  addProviderTiles(providers$CartoDB.DarkMatter) %>%
-  addPolylines(data = r78_sp, group = "R78ab", color = "darkorchid1", weight = 2) %>%
-  addPolylines(data = gs_sp, group = "Girsheen-Suheila", color = "darkorchid1", weight = 2) %>%
-  addPolylines(data = osm_sf, group = "Main Roads", color = "white", weight = 2) %>%
-  addLayersControl(
-    overlayGroups = c("R78ab", "Girsheen-Suheila", "Main Roads"),
-    options = layersControlOptions(collapsed = FALSE)
-  )
 
-
-
-
-
-pal <- colorNumeric(c("#0C2C84", "#41B6C4", "#FFFFCC"), values(r),
-                    na.color = "transparent")
-
-leaflet() %>% addTiles() %>%
-  addRasterImage(r, colors = pal, opacity = 0.8) %>%
-  addLegend(pal = pal, values = values(r),
-            title = "Surface temp")
-
-
-# Functions --------------------------------------------------------------------
-as.character.htmlwidget <- function(x, ...) {
-  htmltools::HTML(
-    htmltools:::as.character.shiny.tag.list(
-      htmlwidgets:::as.tags.htmlwidget(
-        x
-      ),
-      ...
-    )
-  )
-}
-
-add_deps <- function(dtbl, name, pkg = name) {
-  tagList(
-    dtbl,
-    htmlwidgets::getDependency(name, pkg)
-  )
-}
-
-roi_sf <- readRDS(file.path(git_dir, "data", paste0("hex50", ".Rds")))
-
-v <- roi_sf$ntl_2022
-v <- v[!is.na(v)]
-v <- v[v != Inf]
-v <- v[v != -Inf]
-
-pal_rev <- colorNumeric(
-  palette = "Spectral",
-  domain = c(-max(abs(v)), 0, max(abs(v))),
-  reverse = F
-)
-
-pal <- colorNumeric(
-  palette = "Spectral",
-  domain = c(-max(abs(v)), 0, max(abs(v))),
-  reverse = T
-)
-
-roi_sf$popup <- paste0("<h4> Trends in NTL for:<br>", roi_sf$name, "</h4>", 
-                       "<br>",
-                       roi_sf$ntl_spark)
-
-library(leaflet.extras)
-library(sparkline)
-leaflet() %>%
-  addTiles() %>%
-  addPolygons(data = roi_sf,
-              color = ~pal(ntl_2022)) %>%
-  addLegend("topright",
-            pal = pal_rev,
-            values = c(-max(abs(v)), 0, max(abs(v))),
-            title = "Legend",
-            labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE)),
-            opacity = 1) 
-
-leaflet() %>%
-  addTiles() %>%
-  addPolygons(data = roi_sf,
-              label = ~lapply(paste0(popup), HTML),
-              popupOptions = popupOptions(minWidth = 50,
-                                          maxHeight = 150),
-              stroke = F,
-              smoothFactor = 0,
-              fillOpacity = 0.9,
-              color = ~pal(ntl_2022)) %>%
-  onRender("function(el,x) {
-      this.on('tooltipopen', function() {HTMLWidgets.staticRender();})
-    }") %>%
-  addLegend("topright",
-            pal = pal,
-            values = c(-max(abs(v)), 0, max(abs(v))),
-            title = "Legend",
-            #labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE)),
-            opacity = 1) %>%
-  add_deps("sparkline") %>%
-  browsable()
-
+# 
+# 
+# 
+# leaflet() %>%
+#   addProviderTiles(providers$CartoDB.DarkMatter) %>%
+#   addPolylines(data = r78_sp, group = "R78ab", color = "darkorchid1", weight = 2) %>%
+#   addPolylines(data = gs_sp, group = "Girsheen-Suheila", color = "darkorchid1", weight = 2) %>%
+#   addPolylines(data = osm_sf, group = "Main Roads", color = "white", weight = 2) %>%
+#   addLayersControl(
+#     overlayGroups = c("R78ab", "Girsheen-Suheila", "Main Roads"),
+#     options = layersControlOptions(collapsed = FALSE)
+#   )
+# 
+# 
+# 
+# 
+# 
+# pal <- colorNumeric(c("#0C2C84", "#41B6C4", "#FFFFCC"), values(r),
+#                     na.color = "transparent")
+# 
+# leaflet() %>% addTiles() %>%
+#   addRasterImage(r, colors = pal, opacity = 0.8) %>%
+#   addLegend(pal = pal, values = values(r),
+#             title = "Surface temp")
+# 
+# 
+# # Functions --------------------------------------------------------------------
+# as.character.htmlwidget <- function(x, ...) {
+#   htmltools::HTML(
+#     htmltools:::as.character.shiny.tag.list(
+#       htmlwidgets:::as.tags.htmlwidget(
+#         x
+#       ),
+#       ...
+#     )
+#   )
+# }
+# 
+# add_deps <- function(dtbl, name, pkg = name) {
+#   tagList(
+#     dtbl,
+#     htmlwidgets::getDependency(name, pkg)
+#   )
+# }
+# 
+# roi_sf <- readRDS(file.path(git_dir, "data", paste0("hex50", ".Rds")))
+# 
+# v <- roi_sf$ntl_2022
+# v <- v[!is.na(v)]
+# v <- v[v != Inf]
+# v <- v[v != -Inf]
+# 
+# pal_rev <- colorNumeric(
+#   palette = "Spectral",
+#   domain = c(-max(abs(v)), 0, max(abs(v))),
+#   reverse = F
+# )
+# 
+# pal <- colorNumeric(
+#   palette = "Spectral",
+#   domain = c(-max(abs(v)), 0, max(abs(v))),
+#   reverse = T
+# )
+# 
+# roi_sf$popup <- paste0("<h4> Trends in NTL for:<br>", roi_sf$name, "</h4>", 
+#                        "<br>",
+#                        roi_sf$ntl_spark)
+# 
+# library(leaflet.extras)
+# library(sparkline)
+# leaflet() %>%
+#   addTiles() %>%
+#   addPolygons(data = roi_sf,
+#               color = ~pal(ntl_2022)) %>%
+#   addLegend("topright",
+#             pal = pal_rev,
+#             values = c(-max(abs(v)), 0, max(abs(v))),
+#             title = "Legend",
+#             labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE)),
+#             opacity = 1) 
+# 
+# leaflet() %>%
+#   addTiles() %>%
+#   addPolygons(data = roi_sf,
+#               label = ~lapply(paste0(popup), HTML),
+#               popupOptions = popupOptions(minWidth = 50,
+#                                           maxHeight = 150),
+#               stroke = F,
+#               smoothFactor = 0,
+#               fillOpacity = 0.9,
+#               color = ~pal(ntl_2022)) %>%
+#   onRender("function(el,x) {
+#       this.on('tooltipopen', function() {HTMLWidgets.staticRender();})
+#     }") %>%
+#   addLegend("topright",
+#             pal = pal,
+#             values = c(-max(abs(v)), 0, max(abs(v))),
+#             title = "Legend",
+#             #labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE)),
+#             opacity = 1) %>%
+#   add_deps("sparkline") %>%
+#   browsable()
+# 
